@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNDTAG | Animated Button</title>
+    <style>
+        /* Базовые стили страницы (как раньше) */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000 url('ф.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow: hidden;
+            -webkit-user-select: none; /* Запрет выделения на iOS */
+            user-select: none;
+        }
+
+        /* Стиль изображения-кнопки к.png */
+        #main-btn {
+            cursor: pointer;
+            max-width: 85vw;
+            max-height: 80vh;
+            border-radius: 10px; /* Скругление (по желанию) */
+            
+            /* Базовые настройки для плавности эффектов */
+            transition: transform 0.15s ease-out, box-shadow 0.2s ease;
+            -webkit-tap-highlight-color: transparent; /* Убирает синюю рамку на мобильных */
+        }
+
+        /* 1. Эффект "продавливания" при непосредственном нажатии (клик мышкой или касание) */
+        #main-btn:active {
+            transform: scale(0.96); /* Кнопка уменьшается */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); /* Тень становится ближе */
+        }
+
+        /* 2. Класс для пульсации, когда звук играет (добавляется через JavaScript) */
+        #main-btn.playing {
+            animation: pulse 2.5s infinite ease-in-out;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Определение анимации пульсации */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); } /* Легкое увеличение */
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="к.png" id="main-btn" alt="Play/Pause" onclick="toggleAudio()">
+
+    <audio id="player" src="з.m4a" loop></audio>
+
+    <script>
+        const audio = document.getElementById('player');
+        const btn = document.getElementById('main-btn');
+        
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        // Звук запущен успешно
+                        btn.classList.add('playing'); // Включаем пульсацию
+                    })
+                    .catch(e => console.log("Ошибка воспроизведения:", e));
+            } else {
+                audio.pause();
+                audio.currentTime = 0; // Сброс звука
+                btn.classList.remove('playing'); // Выключаем пульсацию
+            }
+        }
+    </script>
+
+</body>
+</html>
